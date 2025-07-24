@@ -172,5 +172,46 @@ Matriz Matriz::transpuesta() const {
         return true;
     }
 
-   
+  void Matriz::setValor(int f, int c, double valor) {
+        if (f < 0 || f >= filas || c < 0 || c >= columnas)
+            throw std::out_of_range("�ndice fuera de rango.");
+        datos[f][c] = valor;
+    }
+
+    double Matriz::getValor(int f, int c) const {
+        if (f < 0 || f >= filas || c < 0 || c >= columnas)
+            throw std::out_of_range("�ndice fuera de rango.");
+        return datos[f][c];
+    }
+
+    int Matriz::getFilas() const { return filas; }
+    int Matriz::getColumnas() const { return columnas; }
+
+    void Matriz::anadirFila() {
+        double** nuevo = new double*[filas + 1];
+        for (int i = 0; i < filas; ++i)
+            nuevo[i] = datos[i];
+        nuevo[filas] = new double[columnas];
+        for (int j = 0; j < columnas; ++j)
+            nuevo[filas][j] = 0.0;
+        delete[] datos;
+        datos = nuevo;
+        filas++;
+    }
+
+    void Matriz::anadirColumna() {
+        for (int i = 0; i < filas; ++i) {
+            double* nuevaFila = new double[columnas + 1];
+            for (int j = 0; j < columnas; ++j)
+                nuevaFila[j] = datos[i][j];
+            nuevaFila[columnas] = 0.0;
+            delete[] datos[i];
+            datos[i] = nuevaFila;
+        }
+        columnas++;
+    }
+
+}
+
+ 
 
