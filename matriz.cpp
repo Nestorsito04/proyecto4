@@ -127,3 +127,50 @@ namespace MatrizLib {
         }
     }
 
+Matriz Matriz::transpuesta() const {
+        Matriz t(columnas, filas);
+        for (int i = 0; i < filas; ++i)
+            for (int j = 0; j < columnas; ++j)
+                t.datos[j][i] = datos[i][j];
+        return t;
+    }
+
+    double Matriz::determinante() const {
+        if (filas != columnas)
+            throw std::runtime_error("El determinante solo se puede calcular para matrices cuadradas.");
+        return calcularDeterminante(datos, filas);
+    }
+
+    Matriz Matriz::suma(const Matriz& otra) const {
+        if (filas != otra.filas || columnas != otra.columnas)
+            throw std::runtime_error("Las matrices deben tener las mismas dimensiones para sumar.");
+        Matriz resultado(filas, columnas);
+        for (int i = 0; i < filas; ++i)
+            for (int j = 0; j < columnas; ++j)
+                resultado.datos[i][j] = datos[i][j] + otra.datos[i][j];
+        return resultado;
+    }
+
+    Matriz Matriz::multiplicacion(const Matriz& otra) const {
+        if (columnas != otra.filas)
+            throw std::runtime_error("Dimensiones incompatibles para multiplicaci�n.");
+        Matriz resultado(filas, otra.columnas);
+        for (int i = 0; i < filas; ++i)
+            for (int j = 0; j < otra.columnas; ++j)
+                for (int k = 0; k < columnas; ++k)
+                    resultado.datos[i][j] += datos[i][k] * otra.datos[k][j];
+        return resultado;
+    }
+
+    bool Matriz::esIgual(const Matriz& otra) const {
+        if (filas != otra.filas || columnas != otra.columnas)
+            return false;
+        for (int i = 0; i < filas; ++i)
+            for (int j = 0; j < columnas; ++j)
+                if (std::fabs(datos[i][j] - otra.datos[i][j]) > 1e-9)
+                    return false;
+        return true;
+    }
+
+   
+
